@@ -1,0 +1,48 @@
+<form [formGroup]="form" class="users-filter">
+  <!-- Поле поиска -->
+  <mat-form-field class="users-filter__search">
+    <mat-label>Поиск</mat-label>
+    <input
+      #filterInput
+      matInput
+      type="text"
+      class="users-filter__input"
+      formControlName="search"
+      placeholder="Введите значение"
+    />
+  </mat-form-field>
+
+  <button
+    mat-icon-button
+    type="button"
+    class="users-filter__button"
+    aria-label="Открыть фильтры"
+    [matMenuTriggerFor]="filterMenu"
+  >
+    <mat-icon>filter_list</mat-icon>
+  </button>
+</form>
+
+<mat-menu #filterMenu="matMenu">
+  <button
+    mat-menu-item
+    (click)="onFilterChange(status.ALL)"
+    [disabled]="form.get('status')?.value === 'all'"
+  >
+    Показать всех
+  </button>
+  <button
+    mat-menu-item
+    (click)="onFilterChange(status.ACTIVE)"
+    [disabled]="form.get('status')?.value === 'active'"
+  >
+    Только активные
+  </button>
+  <button
+    mat-menu-item
+    (click)="onFilterChange(status.INACTIVE)"
+    [disabled]="form.get('status')?.value === 'inactive'"
+  >
+    Только неактивные
+  </button>
+</mat-menu>

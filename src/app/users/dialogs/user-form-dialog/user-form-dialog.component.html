@@ -1,0 +1,24 @@
+<form class="form-user" [formGroup]="form" (ngSubmit)="applyChangesForm()">
+  <mat-form-field class="form-user__group">
+    <mat-label class="form-user__label" for="name">Имя</mat-label>
+    <input matInput class="form-user__input" id="name" type="text" formControlName="name" />
+    <mat-error>Имя введено неправильно</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form-user__group">
+    <mat-label class="form-user__label" for="email">Email</mat-label>
+    <input matInput class="form-user__input" id="email" type="text" formControlName="email" />
+    <mat-error>Email введен неправильно</mat-error>
+  </mat-form-field>
+
+  <button
+    [matTooltip]="messageTooltip"
+    mat-flat-button
+    class="form-user__button"
+    type="submit"
+    [disabled]="!form.valid"
+  >
+    {{ data?.user ? 'Редактировать' : 'Добавить' }}
+    <mat-icon>{{ data?.user ? 'edit' : 'add' }}</mat-icon>
+  </button>
+</form>

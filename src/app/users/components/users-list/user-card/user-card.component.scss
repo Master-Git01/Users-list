@@ -1,0 +1,52 @@
+.user-card {
+  max-width: 400px;
+  padding-bottom: 15px;
+  cursor: pointer;
+
+  &:hover {
+    transition: 0.3s;
+    box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  &__content {
+    margin-top: 15px;
+  }
+
+  &__header-image {
+    background-image: url('/assets/user.jpg');
+    background-size: cover;
+  }
+
+  &__footer-btn {
+    margin-top: 15px;
+    padding: 7px 14px;
+    border: 1px solid #91908e;
+    background-color: white;
+    cursor: pointer;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+
+    &:active {
+      transition: 0.3s;
+      scale: 0.99;
+      box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+span.active {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+span.inactive {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 5px;
+}

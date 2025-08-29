@@ -1,0 +1,27 @@
+.confirm-dialog {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 448px;
+  min-height: 300px;
+  padding: 24px;
+
+  &__title {
+    color: #231f20;
+    font-weight: 500;
+    font-size: 24px;
+  }
+
+  &__actions {
+    padding: 0;
+  }
+
+  &__delete-button {
+    background: linear-gradient(90deg, #e64646 0%, #ff7676 100%);
+  }
+}
+
+::ng-deep .confirm-dialog__delete-button .mdc-button__label {
+  color: white;
+}

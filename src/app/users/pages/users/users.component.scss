@@ -1,0 +1,25 @@
+.users {
+  position: relative;
+
+  &__title {
+    margin-top: 20px;
+  }
+
+  &__add-button {
+    position: sticky;
+    bottom: 50px;
+    transform: translateX(50%);
+    display: flex;
+    justify-self: flex-end;
+    background-color: var(--color-honey);
+  }
+
+  &__user-detail {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1320px;
+  }
+}

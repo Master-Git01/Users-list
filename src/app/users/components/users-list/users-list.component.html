@@ -1,0 +1,9 @@
+<div class="users__list">
+  <ng-container *ngFor="let user of users">
+    <app-user-card
+      [user]="user"
+      (editUser)="onUserEdit($event)"
+      (deleteUser)="onUserDelete($event)"
+    ></app-user-card>
+  </ng-container>
+</div>

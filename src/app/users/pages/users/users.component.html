@@ -1,0 +1,22 @@
+// eslint-disable-next-line @angular-eslint/template/click-events-have-key-events
+<section class="users" (click)="onBackgroundClick($event)" tabindex="0">
+  <div class="container">
+    <h1 class="users__title">Компонент списка пользователей</h1>
+    <app-users-filter (filterUsers)="changeUsersFilter($event)"></app-users-filter>
+    <app-users-list
+      [users]="(users$ | async)!"
+      (editUser)="openEditUserDialog($event)"
+      (deleteUser)="openDeleteUserDialog($event)"
+    ></app-users-list>
+    <app-user-details class="users__user-detail"></app-user-details>
+    <button
+      [matTooltip]="messageTooltip"
+      (click)="openCreateUserDialog()"
+      class="users__add-button"
+      mat-fab
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</section>
+ 
