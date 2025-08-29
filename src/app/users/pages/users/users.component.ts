@@ -17,7 +17,7 @@ import { UserDeleteConfirmDialogData } from '../../dialogs/interfaces/user-delet
 import { DestroyRef } from '@angular/core';
 import { NotificationService } from '../../../shared/services/snackbar.service';
 import { UsersFilterComponent } from '../../components/users-filter/users-filter.component';
-import { UserFilter } from '../../components/users-filter/interfaces/users-filter.interface';
+import { UsersFilter } from '../../interfaces/users-filter.interface';
 import { UserDetailsComponent } from '../../components/user-details/user-details.component';
 
 @Component({
@@ -42,7 +42,7 @@ export class UsersComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly notificationService: NotificationService = inject(NotificationService);
 
-  readonly users$: Observable<UserEntity[]> = this.usersService.filteredUsers$;
+  readonly users$: Observable<UserEntity[]> = this.usersService.users$;
 
   get messageTooltip(): string {
     return USER_TOOLTIPS.ADD;
@@ -54,13 +54,12 @@ export class UsersComponent implements OnInit {
       .pipe(
         tap((users: UserEntity[]) => {
           this.usersService.users = users;
-          this.usersService.changeUsersFilter();
         }),
       )
       .subscribe();
   }
 
-  changeUsersFilter(filterValue: UserFilter): void {
+  changeUsersFilter(filterValue: UsersFilter): void {
     this.usersService.changeUsersFilter(filterValue);
   }
 
@@ -120,7 +119,7 @@ export class UsersComponent implements OnInit {
   onBackgroundClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    if (!target.closest('app-users-list') && !target.closest('app-user-details')) {
+    if (!target.closest('app-user-card') && !target.closest('app-user-details')) {
       this.usersService.selectUser(null);
     }
   }

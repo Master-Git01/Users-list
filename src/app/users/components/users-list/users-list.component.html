@@ -1,5 +1,5 @@
 <div class="users__list">
-  <ng-container *ngFor="let user of users">
+  <ng-container *ngFor="let user of users; trackBy: trackByUserId">
     <app-user-card
       [user]="user"
       (editUser)="onUserEdit($event)"

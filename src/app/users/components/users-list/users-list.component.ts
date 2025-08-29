@@ -24,4 +24,8 @@ export class UsersListComponent {
   onUserDelete(userId: number): void {
     this.deleteUser.emit(userId);
   }
+
+  trackByUserId(index: number, user: UserEntity): number {
+    return user.id;
+  }
 }

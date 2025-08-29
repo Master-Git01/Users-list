@@ -43,7 +43,11 @@ export class UserCardComponent {
     this.editUser.emit(this.user);
   }
 
-  onSelectUser(): void {
-    this.usersService.selectUser(this.user);
+  onSelectUser(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('button')) {
+      this.usersService.selectUser(this.user);
+    }
   }
 }

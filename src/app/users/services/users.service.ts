@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { LocalStorageService } from '../../shared/utils/local-storage.service';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, of } from 'rxjs';
 import { UserEntity } from '../interfaces/users.interface';
 import { StorageKey } from '../../shared/enums/storage-key.enum';
 import { UsersApiService } from './users-api.service';
-import { UsersFilterStatus } from '../components/users-filter/enums/users-filter.enum';
+import { UsersFilterStatus } from '../enums/users-filter.enum';
+import { UsersFilter } from '../interfaces/users-filter.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +15,30 @@ export class UsersService {
   private readonly usersApiService = inject(UsersApiService);
 
   private readonly users$$ = new BehaviorSubject<UserEntity[]>([]);
-  private readonly filteredUsers$$ = new BehaviorSubject<UserEntity[]>([]);
   private readonly selectedUser$$ = new BehaviorSubject<UserEntity | null>(null);
+  private readonly filter$$ = new BehaviorSubject<UsersFilter>({
+    search: '',
+    status: UsersFilterStatus.ALL,
+  });
 
-  readonly selectedUser$ = this.selectedUser$$.asObservable();
+  readonly selectedUser$: Observable<UserEntity | null> = this.selectedUser$$.asObservable();
 
-  readonly filteredUsers$: Observable<UserEntity[]> = this.filteredUsers$$.asObservable();
+  readonly users$: Observable<UserEntity[]> = combineLatest([this.users$$, this.filter$$]).pipe(
+    map(([users, filter]) =>
+      users
+        .filter((user) => {
+          switch (filter.status) {
+            case UsersFilterStatus.ACTIVE:
+              return user.active;
+            case UsersFilterStatus.INACTIVE:
+              return !user.active;
+            default:
+              return true;
+          }
+        })
+        .filter((user) => user.name.toLowerCase().includes(filter.search!.toLowerCase())),
+    ),
+  );
 
   get users(): UserEntity[] {
     return this.users$$.getValue();
@@ -28,14 +47,6 @@ export class UsersService {
   set users(users: UserEntity[]) {
     this.users$$.next(users);
     this.localStorageService.set(StorageKey.USERS, users);
-  }
-
-  set filteredUsers(users: UserEntity[]) {
-    this.filteredUsers$$.next(users);
-  }
-
-  selectUser(user: UserEntity | null): void {
-    this.selectedUser$$.next(user);
   }
 
   initUsers(): Observable<UserEntity[]> {
@@ -48,26 +59,12 @@ export class UsersService {
     return this.usersApiService.getUsers();
   }
 
-  changeUsersFilter(filterValue = { search: '', status: 'all' }): void {
-    let filteredUsers: UserEntity[] = [];
+  changeUsersFilter(filter: UsersFilter = { search: '', status: UsersFilterStatus.ALL }): void {
+    this.filter$$.next(filter);
+  }
 
-    switch (filterValue.status) {
-      case UsersFilterStatus.ALL:
-        filteredUsers = [...this.users];
-        break;
-      case UsersFilterStatus.ACTIVE:
-        filteredUsers = this.users.filter((user: UserEntity) => user.active);
-        break;
-      case UsersFilterStatus.INACTIVE:
-        filteredUsers = this.users.filter((user: UserEntity) => !user.active);
-        break;
-    }
-
-    filteredUsers = filteredUsers.filter((user: UserEntity) =>
-      user.name.toLowerCase().includes(filterValue.search.toLowerCase()),
-    );
-
-    this.filteredUsers = filteredUsers;
+  selectUser(user: UserEntity | null): void {
+    this.selectedUser$$.next(user);
   }
 
   isExistingUserEmail(newUser: UserEntity): boolean {

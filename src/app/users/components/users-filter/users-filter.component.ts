@@ -14,8 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { UserFilter } from './interfaces/users-filter.interface';
-import { UsersFilterStatus } from './enums/users-filter.enum';
+import { UsersFilter } from '../../interfaces/users-filter.interface';
+import { UsersFilterStatus } from '../../enums/users-filter.enum';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -35,7 +35,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersFilterComponent implements OnInit {
-  @Output() filterUsers = new EventEmitter<UserFilter>();
+  @Output() filterUsers = new EventEmitter<UsersFilter>();
 
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
@@ -48,7 +48,7 @@ export class UsersFilterComponent implements OnInit {
 
   public ngOnInit(): void {
     this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      const filter: UserFilter = {
+      const filter: UsersFilter = {
         search: value.search || '',
         status: value.status || UsersFilterStatus.ALL,
       };
